@@ -1,0 +1,63 @@
+{% extends "base.html" %} {% block title %}Contacts{% endblock %} {% block content %}
+    <h1 align="center">Contacts</h1>
+    <table class="table table-hover" id="contacts">
+      <thead>
+        <tr>
+          <th>Firstname</th>
+          <th>Lastname</th>
+          <th>Phone Number</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for contact in user.contacts %}
+        <tr class="success">
+          <td>{{ contact.name}}</td>
+          <td>{{ contact.sname}}</td>
+          <td>{{ contact.pnumber}}</td>
+          <td><button 
+              type="button" 
+              class="close" 
+              onClick="deleteContact({{ contact.id }})">
+            <span aria-hidden="true">&times;</span>
+          </button></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <hr color=#eee>
+
+    <form method="POST">
+      <label for="first_name">Name</label>
+      <input 
+            type="text" 
+            name="first_name" 
+            id="first_name" 
+            class="form-control"
+            placeholder="Name" 
+        />
+      <label for="last_name">Surname</label>
+      <input 
+            type="text" 
+            name="last_name" 
+            id="last_name" 
+            class="form-control" 
+            placeholder="Surname"
+        />
+        <label for="phone_number">Phonenumber</label>
+        <input 
+            type="text" 
+            name="phone_number" 
+            id="phone_number" 
+            class="form-control"
+            placeholder="Phone number"
+         />
+      
+      <br />
+      <div align="center">
+        <button type="submit" class="btn btn-primary">Add contact</button>
+      </div>
+    </form>
+    
+    {% endblock %}
+    

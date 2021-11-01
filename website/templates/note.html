@@ -1,0 +1,46 @@
+{% extends "base.html" %} {% block title %}Notes{% endblock %} {% block content
+%}
+<h1 align="center">Notes</h1>
+<!-- <ul class="list-group list-group-flush" id="notes">
+  {% for note in user.notes %}
+  <li class="list-group-item" >
+    {{ note.data }}<span style="padding-left: 50%;">{{ note.date }}</span>
+    
+    <button type="button" class="close" onClick="deleteNote({{ note.id }})">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </li>
+  {% endfor %}
+</ul> -->
+<table class="table table-hover" id="contacts">
+  <thead>
+    <tr>
+      <th>Note</th>
+      <th>Date</th>
+
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for note in user.notes %}
+    <tr class="success">
+      <td>{{ note.data}}</td>
+      <td>{{ note.date}}</td>
+      <td><button 
+          type="button" 
+          class="close" 
+          onClick="deleteNote({{ note.id }})">
+        <span aria-hidden="true">&times;</span>
+      </button></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<form method="POST">
+  <textarea name="note" id="note" class="form-control"></textarea>
+  <br />
+  <div align="center">
+    <button type="submit" class="btn btn-primary">Add Note</button>
+  </div>
+</form>
+{% endblock %}
