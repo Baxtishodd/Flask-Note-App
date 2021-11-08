@@ -1,6 +1,10 @@
 {% extends "base.html" %} {% block title %}Home page{% endblock %} {% block content
     %}
-    <h3 align="center">Home</h3>
+    <h3 align="center">Your Dashboard</h3>
+
+    {% for user in users %}
+        
+    {% endfor %}
 
     <a href="/notes"><button class="btn btn-primary">Note</button></a>
     <a href="/contacts"><button class="btn btn-primary">Contact</button></a>

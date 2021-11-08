@@ -19,6 +19,31 @@
     href="../static/css/bootstrap.css"
     crossorigin="anonymous"
     />
+    <link
+    rel="stylesheet"
+    href="../static/css/colors.css"
+    crossorigin="anonymous"
+    />
+    <style>
+          [data-letters]:before {
+          content:attr(data-letters);
+          display:inline-block;
+          font-size:1em;
+          width:2.5em;
+          height:2.5em;
+          line-height:2.5em;
+          text-align:center;
+          border-radius:50%;
+          vertical-align:middle;
+          margin-right:1em;
+          color:white;
+          background: tomato;
+      }
+      .bi-pen:hover{
+          color: red;
+
+      }
+    </style>
 
     <title>{% block title %}Home{% endblock %}</title>
   </head>
@@ -84,5 +109,6 @@
       type="text/javascript"
       src="{{ url_for('static', filename='index.js') }}"
     ></script>
+
   </body>
 </html>
