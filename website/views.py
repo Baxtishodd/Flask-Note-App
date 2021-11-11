@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, jsonify, session
+from flask import Blueprint, render_template, request, flash, jsonify, session, url_for
 from flask_login import login_required, current_user
 from werkzeug.utils import redirect
 from .models import Note, Contact
@@ -19,7 +19,7 @@ def home():
 
 
 
-# --- Notes
+# --- show Notes and new note
 @views.route('/notes', methods=['GET', 'POST'])
 @login_required
 def notes():
@@ -41,20 +41,22 @@ def notes():
             db.session.commit()
             flash('Note added!', category='success')
 
-    return render_template("note.html", user=current_user, ct=1)
-
-
-@views.route("/note/<int:note_id>/edit", methods=['GET', 'POST'])
-@login_required
-def note_update(note_id):
-    
-
-    note = Note.query.get_or_404(note_id)
-
-    note.data = request.form['note_data']
-    db.session.commit()
-    flash("Note has successfully updated!")
     return render_template("note.html", user=current_user)
+
+
+@views.route('/note-edit', methods = ['GET', 'POST'])
+def note_update():
+ 
+    if request.method == 'POST':
+        my_data = Note.query.get(request.form.get('note_id'))
+ 
+        my_data.title = request.form['title']
+        my_data.data = request.form['note_data']
+
+        db.session.commit()
+        flash("Employe Updated Successfully")
+ 
+    return redirect(url_for('views.notes'))
 
 
 @views.route('/delete-note', methods=['POST'])
@@ -70,7 +72,7 @@ def delete_note():
     return jsonify({})
 
 
-# --- New Contact
+# --- show contact and New Contact
 @views.route('/contacts', methods=['GET', 'POST'])
 @login_required
 def contacts():
@@ -81,9 +83,9 @@ def contacts():
                       "dark green", "magenta", "purple", "dark magenta", "fawn", "flame"]
         rancolor = choice(list_color) 
 
-        first_name = request.form.get('first_name')
-        last_name = request.form.get('last_name')
-        phone_number = request.form.get('phone_number')
+        first_name = request.form.get('name')
+        last_name = request.form.get('sname')
+        phone_number = request.form.get('pnumber')
         avatar = request.form.get('avatar')
 
       
@@ -101,14 +103,28 @@ def contacts():
             # ppath = os.path.join(app.config['AVATAR_FOLDER'], avatar.filename)
             # avatar.save(AVATAR_FOLDER)
 
-
-
             flash('Contact added!', category='success')
-
-
 
     return render_template("contact.html", user=current_user)
 
+
+# --- Edit contact 
+@views.route('/contact-edit', methods = ['GET', 'POST'])
+def contact_update():
+ 
+    if request.method == 'POST':
+        my_data = Contact.query.get(request.form.get('contact_id'))
+
+        my_data.name = request.form.get('name')
+        my_data.sname = request.form.get('sname')
+        my_data.pnumber = request.form.get('pnumber')
+        my_data.avatar = request.form.get('avatar')
+
+
+        db.session.commit()
+        flash("Employe Updated Successfully")
+ 
+    return redirect(url_for('views.contacts'))
 
 # -- delete Contact
 @views.route('/delete-contact', methods=['POST'])

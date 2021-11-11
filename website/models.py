@@ -27,9 +27,9 @@ class User(db.Model, UserMixin):
 
 class Contact(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(10000))
-    sname = db.Column(db.String(10000))
-    pnumber = db.Column(db.String(10000))
+    name = db.Column(db.String(100))
+    sname = db.Column(db.String(100))
+    pnumber = db.Column(db.String(100))
     # avatar = db.Column(db.String(255))
 
     date = db.Column(db.DateTime(timezone=True), default=func.now())

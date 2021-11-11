@@ -16,21 +16,15 @@
     <tr class="success">
       <td>
           {% if 5 == 5 %}
-              <p><img src="../static/uploads/bd.jpg" class="con-avatar">{{ contact.name }} {{ contact.sname }}</p>
+              <p><img src="../static/uploads/bd.jpg" class="con-avatar"> {{ contact.name }} {{ contact.sname }}</p>
           {% else %}
               <p data-letters="{{ contact.name[0] }}">{{ contact.name }} {{ contact.sname }}</p>    
           {% endif %}
       </td>
       <td>{{ contact.pnumber}}</td>
       <td>
-        <button 
-        class="btn btn-primary bi bi-pen"
-        style="color: white;" 
-        title="edit"
-        data-toggle="modal" 
-        data-target="#updatecontact{{contact.id}}"
-        >edit
-      </button>
+        <a href="/contact-edit/{{ contact.id }}" class="btn btn-secondary" 
+           data-toggle="modal" data-target="#editcontact{{ contact.id }}">edit</a>
         <button 
           type="button" 
           class="btn btn-outline-danger" 
@@ -40,7 +34,7 @@
     </tr>
 
     <!--Update contact Modal -->
-    <div class="modal fade" id="updatecontact{{contact.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="editcontact{{contact.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -50,12 +44,13 @@
             </button>
           </div>
           <div class="modal-body">
-            <form method="POST" action="{{ url_for('update')}}">
+            <form method="POST" action="{{ url_for('views.contact_update')}}">
               <label for="first_name">Name</label>
+              <input type="hidden" value="{{contact.id}}" name="contact_id">
               <input 
                     type="text" 
-                    name="first_name" 
-                    id="first_name" 
+                    name="name" 
+                    id="name" 
                     class="form-control"
                     placeholder="Name" 
                     value="{{ contact.name }}"
@@ -63,8 +58,8 @@
               <label for="last_name">Surname</label>
               <input 
                     type="text" 
-                    name="last_name" 
-                    id="last_name" 
+                    name="sname" 
+                    id="sname" 
                     class="form-control" 
                     placeholder="Surname"
                     value="{{ contact.sname }}"
@@ -78,11 +73,11 @@
                     name="avatar"
                     >
                 </div>
-                <label for="phone_number">Phonenumber</label>
+                <label for="pnumber">Phonenumber</label>
                 <input 
                     type="text" 
-                    name="phone_number" 
-                    id="phone_number" 
+                    name="pnumber" 
+                    id="pnumber" 
                     class="form-control"
                     placeholder="Phone number"
                     value="{{ contact.pnumber }}"
@@ -119,16 +114,16 @@
           <label for="first_name">Name</label>
           <input 
                 type="text" 
-                name="first_name" 
-                id="first_name" 
+                name="name" 
+                id="name" 
                 class="form-control"
                 placeholder="Name" 
             />
           <label for="last_name">Surname</label>
           <input 
                 type="text" 
-                name="last_name" 
-                id="last_name" 
+                name="sname" 
+                id="sname" 
                 class="form-control" 
                 placeholder="Surname"
             />
@@ -141,11 +136,11 @@
                 name="avatar"
                 >
             </div>
-            <label for="phone_number">Phonenumber</label>
+            <label for="pnumber">Phonenumber</label>
             <input 
                 type="text" 
-                name="phone_number" 
-                id="phone_number" 
+                name="pnumber" 
+                id="pnumber" 
                 class="form-control"
                 placeholder="Phone number"
               />
@@ -160,6 +155,5 @@
     </div>
   </div>
 </div>
-    
-  {% endblock %}
+{% endblock %}
     
