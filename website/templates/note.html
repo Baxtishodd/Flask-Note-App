@@ -1,6 +1,7 @@
 {% extends "base.html" %} {% block title %}Notes{% endblock %} {% block content
 %}
 <br>
+<!-- Note home page  -->
 <button class="btn btn-primary" data-toggle="modal" data-target="#newnote">Add note</button>
 <h1 align="center">Notes</h1>
 <table class="table table-hover" id="contacts">
@@ -18,20 +19,21 @@
       <td>
         <div class="size_note {{ note.color }} d-block"></div>
         <button class="btn btn-light d-inline" style="margin-left: 100px;" data-toggle="modal" data-target="#shownote{{ note.id }}">{{ note.title}}</button></td>
-      <td>{{ note.date }}</td>
+      <td>{{ note.date.strftime('%Y-%m-%d %H:%M') }}</td>
       <td>
-        <button 
+        <!-- <button 
           class="btn btn-primary bi bi-pen"
           style="color: white;" 
           title="edit"
           data-toggle="modal" 
           data-target="#mymodal{{ note.id }}"
           >edit
-      </button>
-        <button 
-          type="button" 
-          class="btn btn-outline-danger" 
-          onClick="deleteNote({{ note.id }})">delete
+      </button> -->
+      <a class="btn btn-secondary" href="{{ url_for('note_update', post_id=note.id) }}">edit</a>
+      <button 
+      type="button" 
+      class="btn btn-outline-danger" 
+      onClick="deleteNote({{ note.id }})">delete
         <span aria-hidden="true" class="bi bi-trash" style="color: red;" title="delete"></span>
       </button></td>
     </tr>
@@ -47,8 +49,8 @@
             </button>
           </div>
           <div class="modal-body">
-           
-            <form action=" url_for('note_update') " method="POST">
+            <!-- <int: note_id> /{{note.id}}/ -->
+            <form action="" method="POST"> 
               <label for="title">Title</label>
               <input type="text" placeholder="title" id="title" name="title" value="{{note.title}}">
               <input type="hidden" name="id" value="{{note.id}}">
@@ -58,12 +60,12 @@
                 class="form-control" 
                 name="note_data" id="note_data">{{ note.data }}
               </textarea>
-            </form>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+              </div>
 
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Save changes</button>
+            </form>
           </div>
         </div>
       </div>
@@ -74,7 +76,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">{{ note.title }}</h5>
+            <h5 class="modal-title" id="exampleModalLabel">[{{note.id}}] {{ note.title }}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -114,13 +116,11 @@
           <label for="note">Description</label>
           <textarea name="note" id="note" class="form-control"></textarea>
           <br />
-          <div align="center">
-            <button type="submit" class="btn btn-primary">Add Note</button>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Save & Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
         </form>        
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

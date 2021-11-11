@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, jsonify
+from flask import Blueprint, render_template, request, flash, jsonify, session
 from flask_login import login_required, current_user
 from werkzeug.utils import redirect
 from .models import Note, Contact
@@ -23,6 +23,8 @@ def home():
 @views.route('/notes', methods=['GET', 'POST'])
 @login_required
 def notes():
+    # count_row = session.query(Note).count()
+    
     if request.method == 'POST':
         from random import choice
         rancolor = choice(["color1", "color2", "color3", "color4", "color5", "color6",\
@@ -39,22 +41,20 @@ def notes():
             db.session.commit()
             flash('Note added!', category='success')
 
-    return render_template("note.html", user=current_user)
+    return render_template("note.html", user=current_user, ct=1)
 
 
-# @views.route('/note_update', methods=['GET', 'POST'])
-# @login_required
-# def update(id):
+@views.route("/note/<int:note_id>/edit", methods=['GET', 'POST'])
+@login_required
+def note_update(note_id):
     
-#     if request.method == 'POST':
-#         my_data = Note.query.get(request.form.get('id'))
-        
-#         my_data.data = request.form['note_data']
 
-#         db.session.commit()
-#         flash("Note has successfully updated!")
+    note = Note.query.get_or_404(note_id)
 
-#         return render_template("note.html", user=current_user)
+    note.data = request.form['note_data']
+    db.session.commit()
+    flash("Note has successfully updated!")
+    return render_template("note.html", user=current_user)
 
 
 @views.route('/delete-note', methods=['POST'])
