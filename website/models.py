@@ -36,6 +36,7 @@ class Contact(db.Model):
     t_color = db.Column(db.String(1000))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+
 class ToDo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.String(10000))

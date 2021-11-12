@@ -5,9 +5,20 @@
     {% for user in users %}
         
     {% endfor %}
-
-    <a href="/notes"><button class="btn btn-primary">Note</button></a>
-    <a href="/contacts"><button class="btn btn-primary">Contact</button></a>
+    <div class="app_container">
+        <div class="app_link">
+            <object data="../static/css/bootstrap-icons-1.6.1/pen-fill.svg" width="60" class="violet_svg" width="90" height="90"> </object>
+            <a href="/notes"><button class="btn btn-primary">Notes</button></a>
+        </div>
+    
+        <div class="app_link">
+            <object data="../static/css/bootstrap-icons-1.6.1/person-fill.svg" class="app-object violet_svg"> </object>
+            <a href="/contacts"><button class="btn btn-primary">Contacts</button></a>
+        </div>
+    </div>
+    
+    
+    
 
     {% endblock %}
     
