@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, jsonify, session, url_for
 from flask_login import login_required, current_user
 from werkzeug.utils import redirect
-from .models import Note, Contact
+from .models import Note, Contact, Task
 from . import db
 import json
 import os
@@ -54,7 +54,7 @@ def note_update():
         my_data.data = request.form['note_data']
 
         db.session.commit()
-        flash("Employe Updated Successfully")
+        flash("Note Updated Successfully")
  
     return redirect(url_for('views.notes'))
 
@@ -120,10 +120,10 @@ def contact_update():
         my_data.pnumber = request.form.get('pnumber')
         my_data.avatar = request.form.get('avatar')
 
-
+        avatar = url_for('static', filename='images/avatars/' + request.form.get('avatar'))
+        
         db.session.commit()
-        flash("Employe Updated Successfully")
- 
+        flash("Contact Updated Successfully")
     return redirect(url_for('views.contacts'))
 
 # -- delete Contact
@@ -135,6 +135,45 @@ def delete_contact():
     if contact:
         if contact.user_id == current_user.id:
             db.session.delete(contact)
+            db.session.commit()
+
+    return jsonify({})
+
+
+# --- show todo and new todo
+@views.route('/todo', methods=['GET', 'POST'])
+@login_required
+def todo():
+
+    if request.method == 'POST':
+        title = request.form.get('title')
+        task = request.form.get('task')
+        status = request.form.get('status')
+        due_date = request.form.get('date')
+        due_time = request.form.get('time')        
+
+        if len(title) < 1:
+            flash('Task title is too short!', category='error')
+        elif len(task) < 1:
+            flash('Task description is too short', category='error') 
+        else:
+            new_task = Task(title=title, task=task, status=status, due_date=due_date, due_time=due_time, user_id=current_user.id)
+            db.session.add(new_task)
+            db.session.commit()
+            flash('New Task is successfully added!', category='success')
+
+    return render_template("todo.html", user=current_user)
+
+
+# -- delete Task
+@views.route('/delete-task', methods=['POST'])
+def delete_task():
+    task = json.loads(request.data)
+    taskId = task['taskid']
+    task = Task.query.get(taskId)
+    if task:
+        if task.user_id == current_user.id:
+            db.session.delete(task)
             db.session.commit()
 
     return jsonify({})

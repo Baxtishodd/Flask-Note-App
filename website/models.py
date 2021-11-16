@@ -22,7 +22,7 @@ class User(db.Model, UserMixin):
 
     notes = db.relationship('Note')
     contacts = db.relationship('Contact')
-    todos = db.relationship('ToDo')
+    tasks = db.relationship('Task')
 
 
 class Contact(db.Model):
@@ -37,9 +37,12 @@ class Contact(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
-class ToDo(db.Model):
+class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100)) 
     task = db.Column(db.String(10000))
     date = db.Column(db.DateTime(timezone=True), default=func.now())
-    current = db.Column(db.String(1000))
+    due_date = db.Column(db.String(100))
+    due_time = db.Column(db.String(100))
+    status = db.Column(db.String(100))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

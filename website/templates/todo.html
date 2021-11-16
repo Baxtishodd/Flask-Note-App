@@ -1,37 +1,142 @@
-{% extends "base.html" %} {% block title %}ToDo{% endblock %} {% block content
-    %}
-    <h1 align="center">ToDo</h1>
-    <table class="table table-hover" id="contacts">
-      <thead>
-        <tr>
-          <th>ToDo</th>
-          <th>Current</th>
-          <th>Date</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for todo in user.todos %}
-        <tr class="success">
-          <td>{{ todo.task}}</td>
-          <td>{{ todo.current}}</td>
-          <td>{{ todo.date}}</td>
-          <td><button 
-              type="button" 
-              class="close" 
-              onClick="deleteNote({{ note.id }})">
-            <span aria-hidden="true">&times;</span>
-          </button></td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <form method="POST">
-      <textarea name="note" id="note" class="form-control"></textarea>
-      <br />
-      <div align="center">
-        <button type="submit" class="btn btn-primary">Add ToDo</button>
+{% extends "base.html" %} {% block title %}ToDo{% endblock %} 
+{% block content %}
+<br>
+<button class="btn btn-primary" data-toggle="modal" data-target="#newtodo">Add Task</button>
+<h1 align="center">ToDo</h1>
+<table class="table table-hover" id="Todo">
+  <thead>
+    <tr>
+      <th>ToDo</th>
+      <th>Status</th>
+      <th>Due Date</th>
+      <th>Due Time</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for todo in user.tasks %}
+    <tr class="success">
+      <td>
+        <button 
+            class="btn btn-light d-inline" 
+            style="margin-left: 100px;" 
+            data-toggle="modal" 
+            data-target="#showtask{{ todo.id }}">{{ todo.title}}
+          </button>
+      </td>
+      <td><span class="{{ todo.status }}">{{ todo.status}}</span> </td>
+      <td>{{ todo.due_date}}</td>
+      <td>{{ todo.due_time}}</td>
+      <td>
+        <a class="btn btn-primary" 
+           href="/task-edit/{{ todo.id }}" 
+           data-toggle="modal" 
+           data-target="#task_edit{{ todo.id }}">edit</a>
+        
+
+        <button 
+           type="button" 
+           class="btn btn-outline-danger" 
+           onClick="deleteTask({{ todo.id }})">delete
+             <span aria-hidden="true" class="bi bi-trash" style="color: red;" title="delete"></span>
+           </button>
+          </td>
+    </tr>
+
+
+
+    
+<!--Edit task Modal -->
+<div class="modal fade" id="edittodo{{ todo.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-    </form>
-    {% endblock %}
+      <div class="modal-body">
+        <form method="POST">
+          <label for="title">Title</label>
+          <input type="text" placeholder="Task title" id="title" name="title" value="{{ todo.title }}">
+          <br>
+          <label for="note">Description</label>
+          <textarea name="task" id="task" class="form-control">{{ todo.task }}</textarea>
+          <br>
+          
+          <label for="status">Status</label>
+          <select name="status" id="status" value="{{ todo.status }}">
+            <option value="Not yet">Not yet</option>
+            <option value="Done">Done</option>
+            <option value="In Proccess">In Proccess</option>
+          </select>
+          <br>
+          <label for="date">Due date</label>
+          <input type="date" id="date" name="date" value="{{ todo.due_date }}">
+          <br>
+          <label for="time" >Due time</label>
+          <input type="time" name="time" id="time"  value="{{ todo.due_time }}">
+
+          <br />
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Update & Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </form>        
+      </div>
+    </div>
+  </div>
+</div>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+
+<!--New task Modal -->
+<div class="modal fade" id="newtodo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST">
+          <label for="title">Title</label>
+          <input type="text" placeholder="Task title" id="title" name="title">
+          <br>
+          <label for="note">Description</label>
+          <textarea name="task" id="task" class="form-control"></textarea>
+          <br>
+          
+          <label for="status">Status</label>
+          <select name="status" id="status">
+            <option value="Not yet">Not yet</option>
+            <option value="Done">Done</option>
+            <option value="In Proccess">In Proccess</option>
+          </select>
+          <br>
+          <label for="date">Due date</label>
+          <input type="date" id="date" name="date">
+          <br>
+          <label for="time" >Due time</label>
+          <input type="time" name="time" id="time">
+
+          <br />
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Save & Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </form>        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
     

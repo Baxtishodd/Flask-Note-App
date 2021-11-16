@@ -16,3 +16,13 @@ function deleteContact(contactId) {
     window.location.href = "/contacts";
   });
 }
+
+
+function deleteTask(taskId) {
+  fetch("/delete-task", {
+    method: "POST",
+    body: JSON.stringify({ taskid: taskId }),
+  }).then((_res) => {
+    window.location.href = "/todo";
+  });
+}

@@ -18,7 +18,8 @@
     <tr class="success">
       <td>
         <div class="size_note {{ note.color }} d-block"></div>
-        <button class="btn btn-light d-inline" style="margin-left: 100px;" data-toggle="modal" data-target="#shownote{{ note.id }}">{{ note.title}}</button></td>
+        <button class="btn btn-light d-inline" style="margin-left: 100px;" data-toggle="modal" data-target="#shownote{{ note.id }}">{{ note.title}}</button>
+      </td>
       <td>{{ note.date.strftime('%Y-%m-%d %H:%M') }}</td>
       <td>
         <!-- <button 
@@ -29,7 +30,7 @@
           data-target="#mymodal{{ note.id }}"
           >edit
       </button> -->
-      <a class="btn btn-secondary" href="/note-edit/{{ note.id }}" data-toggle="modal" data-target="#note_edit{{ note.id }}">edit</a>
+      <a class="btn btn-primary" href="/note-edit/{{ note.id }}" data-toggle="modal" data-target="#note_edit{{ note.id }}">edit</a>
       <button 
       type="button" 
       class="btn btn-outline-danger" 
