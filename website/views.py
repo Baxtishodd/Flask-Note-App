@@ -5,13 +5,40 @@ from .models import Note, Contact, Task
 from . import db
 import json
 import os
+import secrets
+from werkzeug.utils import secure_filename
+
+
+
+# from flask_wtf.file import FileField 
 views = Blueprint('views', __name__)
 
 
 AVATAR_FOLDER = 'static/images/avatars/'
 
+# ---Avatar upload---
 
-# --- Home
+
+UPLOAD_FOLDER = '/path/to/the/uploads'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join('static/images/avatars', picture_fn)
+    form_picture.save(picture_path)
+
+    return picture_fn
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+
+# --- Home page
 @views.route('/')
 def home():
 
@@ -76,6 +103,8 @@ def delete_note():
 @views.route('/contacts', methods=['GET', 'POST'])
 @login_required
 def contacts():
+
+    image_file = url_for('static', filename='images/avatars/' + current_user.avatar)
     if request.method == 'POST':
 
         from random import choice
@@ -105,7 +134,7 @@ def contacts():
 
             flash('Contact added!', category='success')
 
-    return render_template("contact.html", user=current_user)
+    return render_template("contact.html", user=current_user, image_file=image_file)
 
 
 # --- Edit contact 
@@ -120,10 +149,31 @@ def contact_update():
         my_data.pnumber = request.form.get('pnumber')
         my_data.avatar = request.form.get('avatar')
 
-        avatar = url_for('static', filename='images/avatars/' + request.form.get('avatar'))
+        # if request.form.get('avatar'):
+        #     picture_file = save_picture(request.form.get('avatar'))
+        #     current_user.avatar = picture_file
+
+        # avatar = url_for('static', filename='images/avatars/' + request.form.get('avatar'))
         
         db.session.commit()
         flash("Contact Updated Successfully")
+
+        # Avatar upload
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join('', filename))
+            return redirect(url_for('download_file', name=filename))
+
     return redirect(url_for('views.contacts'))
 
 # -- delete Contact
@@ -160,9 +210,28 @@ def todo():
             new_task = Task(title=title, task=task, status=status, due_date=due_date, due_time=due_time, user_id=current_user.id)
             db.session.add(new_task)
             db.session.commit()
-            flash('New Task is successfully added!', category='success')
+            flash(f"\"{title}\" is successfully added!", category='success')
 
     return render_template("todo.html", user=current_user)
+
+
+# --- Edit Task 
+@views.route('/task-edit', methods = ['GET', 'POST'])
+def todo_update():
+ 
+    if request.method == 'POST':
+        my_data = Task.query.get(request.form.get('task_id'))
+
+        my_data.title = request.form.get('title')
+        my_data.task = request.form.get('task')
+        my_data.status = request.form.get('status')
+        my_data.due_date = request.form.get('due_date')
+        my_data.due_time = request.form.get('due_time')
+        
+        db.session.commit()
+        flash(f"\"{my_data.title}\" Updated Successfully")
+
+    return redirect(url_for('views.todo'))
 
 
 # -- delete Task

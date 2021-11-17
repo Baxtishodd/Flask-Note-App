@@ -1,3 +1,12 @@
+@font-face {
+    font-family: myFirstFont;
+    src: url(./bootstrap-icons-1.6.1/fonts/ShipporiAntiqueB1-Regular.ttf);
+  }
+  
+  body {
+    font-family: myFirstFont;
+  }
+
 
 .app_container{
     display: flex;
@@ -50,4 +59,28 @@ div.app-object p {
 
 svg :hover{
     fill: rgb(153, 90, 211)
+}
+
+.Done{
+    background-color: green;
+    color: white;
+    border-radius: 5px;
+    border: solid rgb(39, 77, 2) 1px;
+    padding: 0 5px 0 5px;
+}
+
+.Notyet{
+    background-color: rgb(198, 211, 198);
+    color: rgb(24, 23, 23);
+    border-radius: 5px;
+    border: solid rgb(56, 58, 54) 1px;
+    padding: 0 5px 0 5px;
+}
+
+.Inproccess{
+    background-color: rgb(223, 64, 37);
+    color: white;
+    border-radius: 5px;
+    border: solid rgb(61, 21, 2) 1px;
+    padding: 0 5px 0 5px;
 }

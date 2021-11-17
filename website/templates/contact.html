@@ -16,7 +16,7 @@
     <tr class="success">
       <td>
           {% if 5 == 5 %}
-              <p><img src="../static/uploads/bd.jpg" class="con-avatar"> {{ contact.name }} {{ contact.sname }}</p>
+              <p><img src="{{ image_file }}" class="con-avatar"> {{ contact.name }} {{ contact.sname }}</p>
           {% else %}
               <p data-letters="{{ contact.name[0] }}">{{ contact.name }} {{ contact.sname }}</p>    
           {% endif %}
@@ -44,7 +44,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <form method="POST" action="{{ url_for('views.contact_update')}}">
+            <form method="POST" action="{{ url_for('views.contact_update')}}" enctype="multipart/form-data" >
               <label for="first_name">Name</label>
               <input type="hidden" value="{{contact.id}}" name="contact_id">
               <input 
