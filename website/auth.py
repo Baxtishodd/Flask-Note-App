@@ -3,9 +3,31 @@ from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
-
+import secrets
+import os
+from werkzeug.utils import secure_filename
 
 auth = Blueprint('auth', __name__)
+
+AVATAR_FOLDER = 'static/images/avatars/'
+
+# ---Avatar upload---
+
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join('static/images/avatars', picture_fn)
+    form_picture.save(picture_path)
+    return picture_fn
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -42,11 +64,16 @@ def sign_up():
         first_name = request.form.get('firstName')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
-        user_photo = request.form.get('avatar')
+        file = request.files['avatar']
+        
+
+        # avatar_url = url_for('static', filename='images/avatars/' + current_user.avatar)
+
+
 
         user = User.query.filter_by(email=email).first()
         if user:
-            flash('Email already exists.', category='error')
+            flash('Email already exists. ' + avatar, category='error')
         elif len(email) < 4:
             flash('Email must be greater than 3 characters.', category='error')
         elif len(first_name) < 2:
@@ -56,10 +83,24 @@ def sign_up():
         elif len(password1) < 7:
             flash('Password must be at least 7 characters.', category='error')
         else:
-            new_user = User(email=email, first_name=first_name, password=generate_password_hash(
-                password1,  method='sha256')) # avatar=user_photo,
+            
+
+            new_user = User(email=email, first_name=first_name, avatar=file.filename, 
+                    password=generate_password_hash(password1, method='sha256')) # avatar=user_photo,
+            
+
             db.session.add(new_user)
             db.session.commit()
+
+            
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join('website/static/images/avatars/', filename))
+                
+                # flash("Succesfully  registered!" + request.form.get('firstname'))
+
+                # return redirect(url_for('views.home', name=filename))
+
             login_user(new_user, remember=True)
             flash('Account created!', category='success')
             return redirect(url_for('views.home'))

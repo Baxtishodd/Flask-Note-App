@@ -24,7 +24,7 @@ def home():
  
 @app.route('/', methods=['POST'])
 def upload_image():
-    if 'file' not in request.files:
+    if 'avatar' not in request.files:
         flash('No file part')
         return redirect(request.url)
     file = request.files['file']

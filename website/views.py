@@ -28,7 +28,6 @@ def save_picture(form_picture):
     picture_fn = random_hex + f_ext
     picture_path = os.path.join('static/images/avatars', picture_fn)
     form_picture.save(picture_path)
-
     return picture_fn
 
 
@@ -104,7 +103,10 @@ def delete_note():
 @login_required
 def contacts():
 
-    image_file = url_for('static', filename='images/avatars/' + current_user.avatar)
+    # my_data = Contact.query.get(request.form.get('contact_id'))
+    # avatar = my_data.avatar
+    # image_file = url_for('static', filename='images/avatars/' + avatar)
+
     if request.method == 'POST':
 
         from random import choice
@@ -115,7 +117,7 @@ def contacts():
         first_name = request.form.get('name')
         last_name = request.form.get('sname')
         phone_number = request.form.get('pnumber')
-        avatar = request.form.get('avatar')
+        file = request.files['avatar']
 
       
         if len(first_name) < 1:
@@ -125,16 +127,33 @@ def contacts():
         elif len(phone_number) < 1:
             flash('Phone number is too short!', category='error')
         else:
-            new_contact = Contact(name=first_name, sname=last_name, pnumber=phone_number,  t_color=rancolor, user_id=current_user.id) # avatar=avatar,
+            new_contact = Contact(name=first_name, sname=last_name, pnumber=phone_number, t_color=rancolor, user_id=current_user.id)
             db.session.add(new_contact)
             db.session.commit()
 
-            # ppath = os.path.join(app.config['AVATAR_FOLDER'], avatar.filename)
-            # avatar.save(AVATAR_FOLDER)
+            # # Avatar upload
+            # if 'avatar' not in request.files:
+            #     flash(f"No file part {request.files}" )
+            #     return redirect(request.url)
+            # file = request.files['avatar']
+            # # If the user does not select a file, the browser submits an
+            # # empty file without a filename.
+            # if file.filename == '':
+            #     flash('No selected file')
+            #     return redirect(request.url)
+            
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join('website/static/images/avatars/', filename))
+                
+                # flash("Contact Updated Successfully")
+
+                return redirect(url_for('views.contacts', name=filename))
+
 
             flash('Contact added!', category='success')
 
-    return render_template("contact.html", user=current_user, image_file=image_file)
+    return render_template("contact.html", user=current_user)
 
 
 # --- Edit contact 
@@ -142,28 +161,24 @@ def contacts():
 def contact_update():
  
     if request.method == 'POST':
-        my_data = Contact.query.get(request.form.get('contact_id'))
 
+        my_data = Contact.query.get(request.form.get('contact_id'))
+        
+        file = request.files['avatar']
         my_data.name = request.form.get('name')
         my_data.sname = request.form.get('sname')
         my_data.pnumber = request.form.get('pnumber')
-        my_data.avatar = request.form.get('avatar')
+        my_data.avatar = file.filename
 
-        # if request.form.get('avatar'):
-        #     picture_file = save_picture(request.form.get('avatar'))
-        #     current_user.avatar = picture_file
-
-        # avatar = url_for('static', filename='images/avatars/' + request.form.get('avatar'))
-        
         db.session.commit()
-        flash("Contact Updated Successfully")
+        
 
         # Avatar upload
         # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
+        if 'avatar' not in request.files:
+            flash(f"No file part {request.files}" )
             return redirect(request.url)
-        file = request.files['file']
+        
         # If the user does not select a file, the browser submits an
         # empty file without a filename.
         if file.filename == '':
@@ -171,8 +186,11 @@ def contact_update():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join('', filename))
-            return redirect(url_for('download_file', name=filename))
+            file.save(os.path.join('website/static/images/avatars/', filename))
+            
+            flash("Contact Updated Successfully")
+
+            return redirect(url_for('views.contacts', name=filename))
 
     return redirect(url_for('views.contacts'))
 

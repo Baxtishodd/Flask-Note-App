@@ -16,7 +16,7 @@
     <tr class="success">
       <td>
           {% if 5 == 5 %}
-              <p><img src="{{ image_file }}" class="con-avatar"> {{ contact.name }} {{ contact.sname }}</p>
+              <p><img src="static/images/avatars/{{ contact.avatar }}" class="con-avatar"> {{ contact.name }} {{ contact.sname }}</p>
           {% else %}
               <p data-letters="{{ contact.name[0] }}">{{ contact.name }} {{ contact.sname }}</p>    
           {% endif %}
@@ -110,7 +110,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
           <label for="first_name">Name</label>
           <input 
                 type="text" 

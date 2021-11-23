@@ -30,10 +30,10 @@ class Contact(db.Model):
     name = db.Column(db.String(100))
     sname = db.Column(db.String(100))
     pnumber = db.Column(db.String(100))
-    # avatar = db.Column(db.String(255))
+    avatar = db.Column(db.String(100), nullable=False, default='default.png')
 
     date = db.Column(db.DateTime(timezone=True), default=func.now())
-    t_color = db.Column(db.String(1000))
+    t_color = db.Column(db.String(100))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
