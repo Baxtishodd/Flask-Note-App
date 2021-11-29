@@ -1,14 +1,20 @@
 {% extends "base.html" %} {% block title %}Contacts{% endblock %} {% block content %}
     
 <br/>
-<button class="btn btn-primary" data-toggle="modal" data-target="#newcontact">New contact</button>
-<h1 align="center">Contacts</h1>
+<button 
+  class="btn btn-light" 
+  data-toggle="modal" 
+  data-target="#newcontact">
+    <object data="../static/css/bootstrap-icons-1.6.1/person-plus.svg" 
+            width="16" height="16" color="white"> </object> New contact</button>
+<!-- <h1 align="center">Contacts</h1> -->
 <table class="table table-hover" id="contacts">
   <thead>
     <tr>
-      <th>Fullname</th>
+      <th>Name</th>
+      <th>Email</th>
       <th>Phone Number</th>
-      <th>Actions</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -16,22 +22,83 @@
     <tr class="success">
       <td>
           {% if 5 == 5 %}
-              <p><img src="static/images/avatars/{{ contact.avatar }}" class="con-avatar"> {{ contact.name }} {{ contact.sname }}</p>
+              <p><img 
+                  src="static/images/avatars/{{ contact.avatar }}" 
+                  class="con-avatar"><button 
+                      class="btn btn-light d-inline" 
+                      style="margin-left: 100px;" 
+                      data-toggle="modal" 
+                      data-target="#showcontact{{ contact.id }}">{{ contact.name }} {{ contact.sname }}</button>
+                  </button> </p>
           {% else %}
-              <p data-letters="{{ contact.name[0] }}">{{ contact.name }} {{ contact.sname }}</p>    
+              <p data-letters="{{ contact.name[0] }}">
+                {{ contact.name }} {{ contact.sname }}</p>    
           {% endif %}
       </td>
+       <td>-</td> <!-- {{ contact.email }} -->
       <td>{{ contact.pnumber}}</td>
       <td>
-        <a href="/contact-edit/{{ contact.id }}" class="btn btn-primary" 
-           data-toggle="modal" data-target="#editcontact{{ contact.id }}">edit</a>
-        <button 
-          type="button" 
-          class="btn btn-outline-danger" 
-          onClick="deleteContact({{ contact.id }})">delete
-        <span aria-hidden="true" class="bi bi-trash" style="color: red;"></span>
-      </button></td>
+          <div class="contact-action">
+            
+            <button class="btn btn-light" data-toggle="modal" data-target="#editcontact{{ contact.id }}">
+              <i class="bi bi-pen"></i>
+            </button>
+
+            <button class="btn btn-light" data-toggle="modal" data-target="#isdeletecontact{{ contact.id }}">
+              <i class="bi bi-trash"></i>
+            </button>
+
+          </div>
+      </td>
     </tr>
+
+    <!-- delete contact file  -->
+    <div class="modal fade" id="isdeletecontact{{ contact.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h7 class="modal-title" id="exampleModalLabel">Delete this contact?</h7>
+          </div>
+          <div class="modal-body">  
+            <p class="text-right"><button type="button" class="btn btn-light text-primary" data-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-light text-primary" onClick="deleteContact({{ contact.id }})">Delete</button></p>
+            </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Show contact Modal -->
+    <div class="modal fade" id="showcontact{{contact.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <img src="static/images/avatars/{{ contact.avatar }}" 
+                 class="con-avatar-lg">
+            
+              
+            <div class="modal-footer">
+              <a href="/contact-edit/{{ contact.id }}" class="btn btn-outline-info" 
+           data-toggle="modal" data-target="#editcontact{{ contact.id }}">edit</a>
+              
+            <button 
+              type="button" 
+              class="btn btn-outline-danger" 
+              data-toggle="modal" 
+              data-target="#isdelete">delete
+            </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <!--Update contact Modal -->
     <div class="modal fade" id="editcontact{{contact.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -144,6 +211,42 @@
                 class="form-control"
                 placeholder="Phone number"
               />
+              <br />
+              <button 
+                  type="button" 
+                  class="btn btn-outline-light" 
+                  data-toggle="collapse" 
+                  data-target="#moredata"><object data="../static/css/bootstrap-icons-1.6.1/plus-circle.svg" 
+                  width="16" height="16"> </object> View More</button>
+              <div id="moredata" class="collapse">
+                <label for="email">Email</label>
+                <input 
+                    type="text" 
+                    name="email" 
+                    id="email" 
+                    class="form-control"
+                    placeholder="Email"
+                  />
+
+                <label for="address">Address</label>
+                <input 
+                    type="text" 
+                    name="address" 
+                    id="address" 
+                    class="form-control"
+                    placeholder="Address"
+                  />
+
+                <label for="email">Telegram</label>
+                <input 
+                    type="text" 
+                    name="telegram" 
+                    id="telegram" 
+                    class="form-control"
+                    placeholder="@username"
+                  />
+              </div>
+
               <br />
               <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Add contact</button>

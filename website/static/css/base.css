@@ -5,6 +5,7 @@
   
   body {
     font-family: myFirstFont;
+    background-color: #f8f9fa;
   }
 
 
@@ -16,15 +17,17 @@
 .app_link{
     width: 122px;
     height: 160px;
-    border: solid #eee 1px;
     border-radius: 5px;
-    background-color: rgba(235, 224, 245, 0.466);
+    background-color: #f8f9fa;
     padding: 10px;
     margin: 10px;
-
-
-
  
+}
+.app_link:hover{
+    background-color: rgba(235, 224, 245, 0.466);
+    border: solid #eee 1px;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 .link_img{
@@ -84,3 +87,21 @@ svg :hover{
     border: solid rgb(61, 21, 2) 1px;
     padding: 0 5px 0 5px;
 }
+
+.size_note{
+    width:15px;
+    height: 15px;
+    border-radius: 50%;
+ }
+ 
+ .con-avatar{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+ }
+ 
+ .con-avatar-lg{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+ }
