@@ -1,28 +1,41 @@
 {% extends "base.html" %} {% block title %}Login{% endblock %} {% block content
 %}
-<form method="POST">
-  <h3 align="center">Login</h3>
-  <div class="form-group">
-    <label for="email">Email Address</label>
-    <input
-      type="email"
-      class="form-control"
-      id="email"
-      name="email"
-      placeholder="Enter email"
-    />
+<div id="login-row" class="row justify-content-center align-items-center ">
+  <div id="login-column" class="col-md-6">
+    <div id="login-box" class="col-md-12">
+      <form method="POST">
+        <h3 align="center" class="text-white">Login</h3>
+        
+        <div class="input-group mb-3 ">
+          <i class="input-group-text bi bi-envelope-fill input-btn-r"></i>
+          <input type="text"  name="email" id="email" class="form-control" placeholder=" Email or phone number">
+        </div>
+      
+        <div class="input-group mb-3">
+          <i class="input-group-text bi bi-lock-fill input-btn-r"></i>
+          <input type="password"  name="password" id="password" class="form-control" placeholder=" Password">
+        </div>
+      
+        <br />
+        <div class="col text-center">
+          <button type="submit" class="btn btn-primary ">Login</button>
+          
+          <br/>
+          <b class="text-white">OR</b>
+        </div>
+      </form>
+      <br/>
+      <div class="col text-center">
+        <a href="#" class="btn btn-primary small-txt"><i class=" bi bi-facebook font-s h5"></i> Sign in with Facebook</a>
+        <a href="#" class="btn btn-danger small-txt"><i class=" bi bi-google h6"></i> Sign in with Google</a>
+      </div>
+
+      <div class="col text-center">
+        <p>Not registered? <a href="\sign-up">Sign Up</a></p>
+      </div>
+      
+    </div>
   </div>
-  <div class="form-group">
-    <label for="password">Password</label>
-    <input
-      type="password"
-      class="form-control"
-      id="password"
-      name="password"
-      placeholder="Enter password"
-    />
-  </div>
-  <br />
-  <button type="submit" class="btn btn-primary">Login</button>
-</form>
+</div>
+
 {% endblock %}

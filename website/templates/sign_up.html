@@ -1,57 +1,48 @@
 {% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
 content %}
-<form method="POST"  enctype="multipart/form-data">
-  <h3 align="center">Sign Up</h3>
-  <div class="form-group">
-    <label for="email">Email Address</label>
-    <input
-      type="email"
-      class="form-control"
-      id="email"
-      name="email"
-      placeholder="Enter email"
-    />
+
+<div id="login-row" class="row justify-content-center align-items-center ">
+  <div id="login-column" class="col-md-6">
+    <div id="login-box" class="col-md-12">
+      <form method="POST"  enctype="multipart/form-data">
+        <h3 align="center" class="text-white">Sign Up</h3>
+      
+        <div class="input-group mb-3">
+          <i class="input-group-text bi bi-envelope input-btn-r"></i>
+          <input type="text"  name="email" id="email" class="form-control" placeholder=" Email or phone number">
+        </div>
+      
+        <div class="input-group mb-3">
+          <i class="input-group-text bi bi-person input-btn-r"></i>
+          <input type="text"  name="name" id="name" class="form-control" placeholder=" Name">
+          <input type="text"  name="sname" id="sname" class="form-control" placeholder=" Surname">
+        </div>
+      
+        <div class="input-group mb-3">
+          <i class="input-group-text bi bi-shield-lock input-btn-r"></i>
+          <input type="password"  name="password1" id="password1" class="form-control" placeholder=" Password">
+          <input type="password"  name="password2" id="password2" class="form-control" placeholder=" Password again">
+        </div>
+      
+      
+        <div class="form-group">
+          <!-- <label for="avatar">Your photo</label><br> -->
+          <input
+            type="file"
+            class="btn btn-outline-info text-hide"
+            id="avatar"
+            name="avatar"
+            >
+        </div>
+      
+        <br />
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary ">Submit</button>
+          <p>Have an account? <a href="\login">Login</a></p>
+        </div>
+      </form>          
+    </div>
   </div>
-  <div class="form-group">
-    <label for="firstName">First Name</label>
-    <input
-      type="text"
-      class="form-control"
-      id="firstName"
-      name="firstName"
-      placeholder="Enter first name"
-    />
-  </div>
-  <div class="form-group">
-    <label for="avatar">Your photo</label><br>
-    <input
-      type="file"
-      class="btn btn-outline-info"
-      id="avatar"
-      name="avatar"
-      >
-  </div>
-  <div class="form-group">
-    <label for="password1">Password</label>
-    <input
-      type="password"
-      class="form-control"
-      id="password1"
-      name="password1"
-      placeholder="Enter password"
-    />
-  </div>
-  <div class="form-group">
-    <label for="password2">Password (Confirm)</label>
-    <input
-      type="password"
-      class="form-control"
-      id="password2"
-      name="password2"
-      placeholder="Confirm password"
-    />
-  </div>
-  <br />
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+</div>
+
 {% endblock %}

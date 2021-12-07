@@ -105,3 +105,41 @@ svg :hover{
     height: 150px;
     border-radius: 50%;
  }
+
+ .input-btn-r {
+    border-radius: 2px 0 0 2px ;
+}
+#login-row #login-column #login-box{
+    margin-top: 50px;
+    max-width: 500px;
+    height: auto;
+    border-radius: 15px;
+    background-color: rgba(241, 237, 237, 0.363);
+    backdrop-filter: blur(2px) saturate(30%);
+    padding: 20px;
+  }
+.small-txt{
+    font-size: 12px;
+}
+
+body, html{
+    height: 100%;
+}
+.back_img{
+    background-image: url("../images/back/back.jpg");
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.login-box-light{
+    margin-top: 10px;
+    max-width: auto;
+    height: auto;
+    border-radius: 15px;
+    background-color: rgba(241, 237, 237, 0.486);
+    backdrop-filter: blur(2px) saturate(30%);
+    padding: 20px;
+  }
+

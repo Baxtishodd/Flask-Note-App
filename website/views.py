@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, jsonify, session, url_for
 from flask_login import login_required, current_user
 from werkzeug.utils import redirect
-from .models import Note, Contact, Task
+from .models import Note, Contact, Task, Phonenumber
 from . import db
 import json
 import os
@@ -116,7 +116,16 @@ def contacts():
 
         first_name = request.form.get('name')
         last_name = request.form.get('sname')
+        email = request.form.get('email')
         phone_number = request.form.get('pnumber')
+        hnumber = request.form.get('hnumber')
+        address = request.form.get('address')
+        website = request.form.get('website')
+        telegram = request.form.get('telegram')
+
+        phonelist = request.form.getlist('addphone[]')
+        contactID = request.form.get('contact_id')
+
         file = request.files['avatar']
 
       
@@ -127,8 +136,13 @@ def contacts():
         elif len(phone_number) < 1:
             flash('Phone number is too short!', category='error')
         else:
-            new_contact = Contact(name=first_name, sname=last_name, pnumber=phone_number, t_color=rancolor, user_id=current_user.id)
+            new_contact = Contact(name=first_name.capitalize(), sname=last_name.capitalize(), pnumber=phone_number, \
+             email=email, address=address.capitalize(), siteurl=website, telegram=telegram, t_color=rancolor, user_id=current_user.id)
             db.session.add(new_contact)
+
+            new_pnumber = Phonenumber(contactID=, phoneNumber )
+            
+            db.session.add(new_pnumber)
             db.session.commit()
 
             # # Avatar upload
@@ -264,3 +278,13 @@ def delete_task():
             db.session.commit()
 
     return jsonify({})
+
+
+@views.route('/iqtest', methods=['GET', 'POST'])
+@login_required
+def iqtests():
+    if request.method == 'POST':
+        testid = request.form.get('testid')
+        answer = request.form.get('answer')
+
+        return render_template("iqtest.html", user=current_user)

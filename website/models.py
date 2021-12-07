@@ -17,6 +17,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
+    last_name = db.Column(db.String(150))
     avatar = db.Column(db.String(100), nullable=False, default='default.jpg')
     
 
@@ -27,14 +28,26 @@ class User(db.Model, UserMixin):
 
 class Contact(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+
     name = db.Column(db.String(100))
     sname = db.Column(db.String(100))
+    email = db.Column(db.String(100))
     pnumber = db.Column(db.String(100))
+    hnumber = db.Column(db.String(100))
+    address = db.Column(db.String(100))
+    siteurl = db.Column(db.String(100))
+    telegram = db.Column(db.String(100))
     avatar = db.Column(db.String(100), nullable=False, default='default.png')
 
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     t_color = db.Column(db.String(100))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+class Phonenumber(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    contactID = db.Column(db.String(100))
+    phoneNumber = db.Column(db.String(100))
 
 
 class Task(db.Model):
@@ -46,3 +59,13 @@ class Task(db.Model):
     due_time = db.Column(db.String(100))
     status = db.Column(db.String(100))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+class Iqtest(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    questionIMG = db.Column(db.String(150)) 
+    a = db.Column(db.String(100))
+    b = db.Column(db.String(100))
+    c = db.Column(db.String(100))
+    d = db.Column(db.String(100))
+    answer = db.Column(db.String(100))
