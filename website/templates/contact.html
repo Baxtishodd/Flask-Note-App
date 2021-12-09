@@ -37,8 +37,8 @@
                 {{ contact.name }} {{ contact.sname }}</p>    
           {% endif %}
       </td>
-       <td>{{ contact.email }}</td> <!-- {{ contact.email }} -->
-      <td>{{ contact.pnumber}}</td>
+       <td>{{ contact.contact_email | map(attribute='email') | list | join(', ') }}</td> <!-- {{ contact.email }} -->
+      <td>{{ contact.phone_numbers | map(attribute='number') | list | join(', ') }}</td>
       <td>
           <div class="contact-action">
             
@@ -51,16 +51,6 @@
             </button>
 
           </div>
-          <!-- <div class="dropdown">
-            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-three-dots-vertical"
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </div> -->
       </td>
     </tr>
 
@@ -95,9 +85,8 @@
               <img src="static/images/avatars/{{ contact.avatar }}" 
                  class="con-avatar-lg">
               <p>{{contact.name}} {{contact.sname}}</p>
-              <p>{{contact.email}}</p>
-              <p>{{contact.pnumber}}</p>
-              <p>{{contact.hnumber}}</p>
+              <p>{{ contact.contact_email | map(attribute='email') | list | join(', ') }}</p>
+              <p>{{ contact.phone_numbers | map(attribute='number') | list | join(', ') }}</p>
               <p>{{contact.address}}</p>
               <p>{{contact.siteurl}}</p>
               <p>{{contact.telegram}}</p>
@@ -134,6 +123,39 @@
           <div class="modal-body">
             <form method="POST" class="input_icons" action="{{ url_for('views.contact_update')}}" enctype="multipart/form-data">    
               
+              <div class="user-profilesinglepage" id="avatar-header">
+                <div class="avatar-header">
+                  <div class="avatar-wrapper">
+                    <img class="profile-pic" src="" />
+                    <div class="upload-button">
+                      <i class="fa fa-arrow-circle-up" aria-hidden="true"></i>
+                    </div>
+                    <input class="file-upload" type="file" accept="image/*" />
+                  </div>
+                </div>
+              </div>
+              <script>
+                /***AVATAR SCRIPT***/
+                function readURL(input)
+                {
+                    if(input.files && input.files[0]){
+                        var reader= new FileReader();
+                        reader.onload=function(e)
+                        {
+                            var fileurl=e.target.result;
+                            $('.profile-pic').attr('src',fileurl);
+                        }
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                }
+                $(".file-upload").on('change',function(){
+                readURL(this);
+                });
+                $(".upload-button").on('click',function(){
+                $(".file-upload").click();
+                });
+              </script>
+
               <div class="input-group mb-3">
                 <input type="hidden" value="{{contact.id}}" name="contact_id">
                 <i class="input-group-text bi bi-person-fill input-btn-r"></i>
@@ -141,16 +163,19 @@
                 <input type="text" value="{{ contact.sname }}"  name="sname" id="sname" class="form-control" placeholder=" Surname">
               </div>
     
-              <div class="input-group mb-3">
-                <i class="input-group-text bi bi-telephone-fill input-btn-r"></i>
-                <input type="text" value="{{ contact.pnumber }}"  name="pnumber" id="pnumber" class="form-control" placeholder=" Mobile">
-              </div>
-    
-              <div class="input-group mb-3">
-                <i class="input-group-text bi bi-envelope-fill input-btn-r"></i>
-                <input type="text" value="{{ contact.email }}"  name="email" id="email" class="form-control" placeholder=" Email">
-              </div>
-    
+              {% for number in contact.phone_numbers | map(attribute='number') | list %}
+                  <div class="input-group mb-3">
+                      <i class="input-group-text bi bi-telephone-fill input-btn-r"></i>
+                      <input type="text" value="{{ number }}"  name="UpdateNumber[]" class="form-control" placeholder=" Phone number">
+                  </div>
+              {% endfor %}
+              
+              {% for email in contact.contact_email | map(attribute='email') | list %}
+                  <div class="input-group mb-3">
+                    <i class="input-group-text bi bi-envelope-fill input-btn-r"></i>
+                    <input type="text" value="{{ email }}"  name="UpdateEmail[]" class="form-control" placeholder=" Email">
+                  </div>
+              {% endfor %}
               <div class="form-group">
                 <!-- <label for="avatar">Photo</label><br> -->
                 <input
@@ -229,16 +254,67 @@
             <input type="text"  name="name" id="name" class="form-control" placeholder=" Name">
             <input type="text"  name="sname" id="sname" class="form-control" placeholder=" Surname">
           </div>
+          <div class="input_phone">
+            <div class="input-group mb-3">
+              <i class="input-group-text bi bi-telephone-fill input-btn-r"></i>
+              <input type="text"  name="addphone[]" id="hnumber" class="form-control" placeholder="Phone Number">
+              <div class="input-group-append">
+                <span class="input-group-text"><a href="javascript:void(0);" class="add_phone" title="New Contact"> <i class="bi bi-plus-circle"></i></a></span>
+              </div>
+            </div>
 
-          <div class="input-group mb-3">
-            <i class="input-group-text bi bi-telephone-fill input-btn-r"></i>
-            <input type="text"  name="pnumber" id="pnumber" class="form-control" placeholder=" Mobile">
-          </div>
+            <script>
+              $(document).ready(function(){
+                  var max_input_fields = 5;
+                  var add_phone = $('.add_phone');
+                  var input_phone = $('.input_phone');
+                  var new_phone = '<div class="input-group mb-3"> <i class="input-group-text bi bi-telephone-fill input-btn-r"></i><input type="text" placeholder="Phone Number" class="form-control" name="addphone[]" value=""/><a href="javascript:void(0); "class="remove_phone input-group-append h4" title="Remove input"> &times;</a></div>';
+                  var add_input_count = 1; 
+                  $(add_phone).click(function(){
+                      if(add_input_count < max_input_fields){
+                          add_input_count++; 
+                          $(input_phone).append(new_phone); 
+                      }
+                  });
+                  $(input_phone).on('click', '.remove_phone', function(e){
+                      e.preventDefault();
+                      $(this).parent('.input-group').remove();
+                      add_input_count--;
+                  });
+              });
+              </script>
+            </div>
+            
+            <div class="input_email">
+              <div class="input-group mb-3">
+                <i class="input-group-text bi bi-envelope-fill input-btn-r"></i>
+                <input type="email"  name="addemail[]" id="email" class="form-control" placeholder="Email">
+                <div class="input-group-append">
+                  <span class="input-group-text"><a href="javascript:void(1);" class="add_email" title="New Contact"> <i class="bi bi-plus-circle"></i></a></span>
+                </div>
+              </div>
 
-          <div class="input-group mb-3">
-            <i class="input-group-text bi bi-envelope-fill input-btn-r"></i>
-            <input type="text"  name="email" id="email" class="form-control" placeholder=" Email">
-          </div>
+              <script>
+                $(document).ready(function(){
+                    var max_input_fields = 5;
+                    var add_email = $('.add_email');
+                    var input_email = $('.input_email');
+                    var new_email = '<div class="input-group mb-3"> <i class="input-group-text bi bi-envelope-fill input-btn-r"></i><input type="email" placeholder="Email" class="form-control" name="addemail[]" value=""/><a href="javascript:void(1); "class="remove_email input-group-append h4" title="Remove input"> &times;</a></div>';
+                    var add_input_count = 1; 
+                    $(add_email).click(function(){
+                        if(add_input_count < max_input_fields){
+                            add_input_count++; 
+                            $(input_email).append(new_email); 
+                        }
+                    });
+                    $(input_email).on('click', '.remove_email', function(e){
+                        e.preventDefault();
+                        $(this).parent('.input-group').remove();
+                        add_input_count--;
+                    });
+                });
+                </script>
+              </div>
 
           <div class="form-group">
             <!-- <label for="avatar">Photo</label><br> -->
@@ -259,37 +335,6 @@
             </div>
             
             <div id="moredata" class="collapse">
-              <div class="input-wrapper">
-                
-                <div class="input-group mb-3">
-                  <i class="input-group-text bi bi-telephone-fill input-btn-r"></i>
-                  <input type="text"  name="addphone[]" id="hnumber" class="form-control" placeholder="phonenumber">
-                  <div class="input-group-append">
-                    <span class="input-group-text"><a href="javascript:void(0);" class="add-input" title="Add input"> <i class="bi bi-plus-circle"></i></a></span>
-                  </div>
-                </div>
-
-                <script>
-                  $(document).ready(function(){
-                      var max_input_fields = 10;
-                      var add_input = $('.add-input');
-                      var input_wrapper = $('.input-wrapper');
-                      var new_input = '<div class="input-group mb-3"> <i class="input-group-text bi bi-telephone-fill input-btn-r"></i><input type="text" class="form-control" name="addphone[]" value=""/><a href="javascript:void(0); "class="remove-input input-group-append h4" title="Remove input"> &times;</a></div>';
-                      var add_input_count = 1; 
-                      $(add_input).click(function(){
-                          if(add_input_count < max_input_fields){
-                              add_input_count++; 
-                              $(input_wrapper).append(new_input); 
-                          }
-                      });
-                      $(input_wrapper).on('click', '.remove-input', function(e){
-                          e.preventDefault();
-                          $(this).parent('.input-group').remove();
-                          add_input_count--;
-                      });
-                  });
-                  </script>
-              </div>   
               <div class="input-group mb-3">
                 <i class="input-group-text bi bi-geo-alt-fill input-btn-r"></i>
                 <input type="text"  name="address" id="address" class="form-control" placeholder=" New York, Edison">

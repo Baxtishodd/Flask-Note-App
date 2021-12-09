@@ -143,3 +143,111 @@ body, html{
     padding: 20px;
   }
 
+/* avatar design */
+.logoimg{
+	text-align: center;
+}
+.avatar-wrapper {
+    position: relative;
+    height: 60px;
+    width: 60px;
+    /*margin: 20px auto;*/
+    margin: -100px auto 20px auto;
+    border-radius: 50%;
+    overflow: hidden;
+    /*box-shadow: 1px 1px 15px -5px black;*/
+    box-shadow: none;
+    transition: all .3s ease;
+}
+
+    .avatar-wrapper:hover {
+        transform: scale(1.05);
+        cursor: pointer;
+    }
+
+        .avatar-wrapper:hover .profile-pic {
+            opacity: .5;
+        }
+
+    .avatar-wrapper .profile-pic {
+        height: 100%;
+        width: 100%;
+        transition: all .3s ease;
+    }
+
+        .avatar-wrapper .profile-pic:after {
+            font-family: FontAwesome;
+            content: "\f007";
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            font-size: 45px;
+            background: #ecf0f1;
+            color: #34495e;
+            text-align: center;
+        }
+
+    .avatar-wrapper .upload-button {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+    }
+
+        .avatar-wrapper .upload-button .fa-arrow-circle-up {
+            position: absolute;
+            font-size: 60px;
+            left: 3px;
+            text-align: center;
+            opacity: 0;
+            transition: all .3s ease;
+            color: #e4eae7;
+        }
+
+        .avatar-wrapper .upload-button:hover .fa-arrow-circle-up {
+            opacity: .9;
+        }
+
+#avatar-header
+{
+	
+ 
+   
+    /* width: 200px; */
+    text-align: center;
+    margin-left: 0px auto;
+    margin-left: 35%;
+    margin-right: 35%;
+    border-radius: 30px;
+    margin-top: 15%;
+}
+.avatar-header {
+    
+   
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.test-box{
+    width: 700px;
+    height: 400px;
+    background-color: rgba(241, 237, 237, 0.76);
+    backdrop-filter: blur(2px) saturate(30%);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.box-border{
+    width: 740px;
+    height: 440px;
+    background-color: rgba(241, 237, 237, 0.486);
+    backdrop-filter: blur(2px) saturate(30%);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 2%;
+}

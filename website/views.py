@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, jsonify, session, url_for
 from flask_login import login_required, current_user
 from werkzeug.utils import redirect
-from .models import Note, Contact, Task, Phonenumber
+from .models import ContactEmail, Note, Contact, Task, PhoneNumber, ContactEmail
 from . import db
 import json
 import os
@@ -116,33 +116,29 @@ def contacts():
 
         first_name = request.form.get('name')
         last_name = request.form.get('sname')
-        email = request.form.get('email')
-        phone_number = request.form.get('pnumber')
-        hnumber = request.form.get('hnumber')
         address = request.form.get('address')
         website = request.form.get('website')
         telegram = request.form.get('telegram')
 
-        phonelist = request.form.getlist('addphone[]')
-        contactID = request.form.get('contact_id')
-
+        PhoneList = request.form.getlist('addphone[]')
+        EmailList = request.form.getlist('addemail[]')
         file = request.files['avatar']
+
+        # contact.phone_numbers | map(attribute='number') | list
 
       
         if len(first_name) < 1:
             flash('Name is too short!', category='error')
         elif len(last_name) < 1:
             flash('Surname is too short!', category='error')
-        elif len(phone_number) < 1:
-            flash('Phone number is too short!', category='error')
         else:
-            new_contact = Contact(name=first_name.capitalize(), sname=last_name.capitalize(), pnumber=phone_number, \
-             email=email, address=address.capitalize(), siteurl=website, telegram=telegram, t_color=rancolor, user_id=current_user.id)
-            db.session.add(new_contact)
-
-            new_pnumber = Phonenumber(contactID=, phoneNumber )
+            phone_numbers = list(map(lambda number: PhoneNumber(number=number), PhoneList))
+            contact_email = list(map(lambda email: ContactEmail(email=email), EmailList))
             
-            db.session.add(new_pnumber)
+            new_contact = Contact(name=first_name.capitalize(), sname=last_name.capitalize(), phone_numbers=phone_numbers, \
+             contact_email=contact_email, address=address.capitalize(), siteurl=website, telegram=telegram, t_color=rancolor, user_id=current_user.id)
+           
+            db.session.add(new_contact)
             db.session.commit()
 
             # # Avatar upload
@@ -183,6 +179,9 @@ def contact_update():
         my_data.sname = request.form.get('sname')
         my_data.pnumber = request.form.get('pnumber')
         my_data.avatar = file.filename
+
+        # for contact in current_user.contacts:
+        #     contact.
 
         db.session.commit()
         
@@ -282,9 +281,17 @@ def delete_task():
 
 @views.route('/iqtest', methods=['GET', 'POST'])
 @login_required
-def iqtests():
+def IQtest():
     if request.method == 'POST':
+
         testid = request.form.get('testid')
         answer = request.form.get('answer')
 
-        return render_template("iqtest.html", user=current_user)
+    return render_template("iqtest.html", user=current_user)
+
+
+# --- Edit Iq test
+# @views.route('/iqtest-edit', methods = ['GET', 'POST'])
+# def AddTest():
+ 
+    # if request.method == 'POST':

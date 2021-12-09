@@ -27,13 +27,13 @@ class User(db.Model, UserMixin):
 
 
 class Contact(db.Model):
+    __tablename__ = 'contacts'
     id = db.Column(db.Integer, primary_key=True)
 
     name = db.Column(db.String(100))
     sname = db.Column(db.String(100))
-    email = db.Column(db.String(100))
-    pnumber = db.Column(db.String(100))
-    hnumber = db.Column(db.String(100))
+    phone_numbers = db.relationship('PhoneNumber')
+    contact_email = db.relationship('ContactEmail')
     address = db.Column(db.String(100))
     siteurl = db.Column(db.String(100))
     telegram = db.Column(db.String(100))
@@ -43,11 +43,19 @@ class Contact(db.Model):
     t_color = db.Column(db.String(100))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-class Phonenumber(db.Model):
+class PhoneNumber(db.Model):
+    __tablename__ = 'phone_numbers'
     id = db.Column(db.Integer, primary_key=True)
+    owner = db.relationship("Contact", back_populates='phone_numbers')
+    owner_id = db.Column(db.Integer, db.ForeignKey('contacts.id'))
+    number = db.Column(db.String(100))
 
-    contactID = db.Column(db.String(100))
-    phoneNumber = db.Column(db.String(100))
+class ContactEmail(db.Model):
+    __tablename__ = 'contact_email'
+    id = db.Column(db.Integer, primary_key=True)
+    owner = db.relationship("Contact", back_populates='contact_email')
+    owner_id = db.Column(db.Integer, db.ForeignKey('contacts.id'))
+    email = db.Column(db.String(100))
 
 
 class Task(db.Model):
@@ -62,7 +70,9 @@ class Task(db.Model):
 
 
 class Iqtest(db.Model):
+    __tablename__ = 'iqtest'
     id = db.Column(db.Integer, primary_key=True)
+    
     questionIMG = db.Column(db.String(150)) 
     a = db.Column(db.String(100))
     b = db.Column(db.String(100))
