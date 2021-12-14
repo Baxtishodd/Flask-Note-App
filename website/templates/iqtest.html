@@ -1,10 +1,97 @@
 {% extends "base.html" %}
 {% block title %}Test your IQ {% endblock %}
 {% block content %}
+
+<!-- <div class="">
+    <a class="btn btn-light" href="" data-toggle="modal" data-target="#NewQuestion">New Question</a>
+</div> -->
+
 <div class="box-border ">
-    <div class="d-block test-box">
+    <div class=" test-box">
         <!-- <img src="/website/static/images/testfiles/"> -->
+        <div class="d-block">
+            <p>1/20</p>
+        </div>
+
+        <div class="d-inline-flex">
+            <div class="question-place d-inline">
+                <img class="img-fluid" src="static/uploads/q1.png" alt="Question 1"/>
+            </div>
+    
+            <div class="answer-place d-inline">
+                <div class="d-inline-flex">
+                    <div class="d-inline answer-b">
+                        <span>A <input type="radio" name="answer" value="1"/></span>
+                        <label for="A"><img id="A" class="img-fluid" src="static/uploads/Q 1 A (1).png" alt="Question 1"/></label>
+                    </div>
+                    <div class="d-inline answer-b">
+                        <span>B <input type="radio" name="answer" value="2"/></span>
+                        <img class="img-fluid" src="static/uploads/Q 1 A (2).png" alt="Question 2"/>
+                    </div>
+                </div>
+    
+                <div class="d-inline-flex">
+                    <div class="d-inline answer-b">
+                        <span>C <input type="radio" name="answer" value="3"/></span>
+                        <img class="img-fluid" src="static/uploads/Q 1 A (3).png" alt="Question 3"/>
+                    </div>
+                    <div class="d-inline answer-b">
+                        <span>D <input type="radio" name="answer" value="4"/></span>
+                        <img class="img-fluid" src="static/uploads/Q 1 A (4).png" alt="Question 4"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+
     </div>
     <form method="POST" action=""></form>
 </div>
+
+<!-- <div class="modal fade" id="NewQuestion" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h7 class="modal-title" id="ModalLabel">New Question</h7>
+
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body"> 
+
+          
+          <form action="" method="POST">
+              <label for="Question">Question picture</label>
+              <input class="input-group" type="file" name="Question" id="Question" title="Question picture" />
+              </br>
+
+              <label for="labelA">Option A</label>
+              <input class="input-group" type="file" name="A"  " title="Option A" />
+
+              <label for="labelB">Option B</label>
+              <input type="file" name="B" class="input-group"  title="Option B" />
+
+              <label for="labelC">Option C</label>
+              <input type="file" name="C" class="input-group" title="Option C" />
+
+              <label for="labelD">Option D</label>
+              <input type="file" name=D""  title="Option D" class="input-group" />
+
+              <label for="answer">Right answer</label>
+              <select name="answer" id="answer">
+                  <option >No answer Chosen</option>
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="C">C</option>
+                  <option value="D">D</option>
+              </select>
+
+              <input class="btn btn-primary " type="submit" value="Add Question">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div> -->
 {% endblock%}

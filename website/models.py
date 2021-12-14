@@ -73,7 +73,8 @@ class Iqtest(db.Model):
     __tablename__ = 'iqtest'
     id = db.Column(db.Integer, primary_key=True)
     
-    questionIMG = db.Column(db.String(150)) 
+    title = db.Column(db.String(100))
+    picture = db.Column(db.String(250)) 
     a = db.Column(db.String(100))
     b = db.Column(db.String(100))
     c = db.Column(db.String(100))
