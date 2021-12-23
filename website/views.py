@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, jsonify, session, url_for
 from flask_login import login_required, current_user
 from werkzeug.utils import redirect
-from .models import ContactEmail, Note, Contact, Task, PhoneNumber, ContactEmail
+from .models import ContactEmail, Note, Contact, Task, PhoneNumber, ContactEmail, Iqtest
 from . import db
 import json
 import os
@@ -36,6 +36,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+  
 
 # --- Home page
 @views.route('/')
@@ -282,12 +283,16 @@ def delete_task():
 @views.route('/iqtest', methods=['GET', 'POST'])
 @login_required
 def IQtest():
+
+    QuestionList = IQtest.query.all()
+    Question = IQtest.query.first()
+
     if request.method == 'POST':
 
         testid = request.form.get('testid')
         answer = request.form.get('answer')
 
-    return render_template("iqtest.html", user=current_user)
+    return render_template("iqtest.html", QuestionList=QuestionList, Question=Question, user=current_user)
 
 
 # --- Edit Iq test
@@ -295,3 +300,58 @@ def IQtest():
 # def AddTest():
  
     # if request.method == 'POST':
+
+#to change color of question buttons and disable 
+def setStatus(qlist):
+    qAttempt=[]
+    strval=session['result'].strip()
+    ans=strval.split(',')
+    for i in range(int(len(ans)/2)):
+        qAttempt.append(int(ans[2*i]))  
+    
+    for rw in qlist:
+        if rw.qid in qAttempt:
+            rw.bcol='green'   # set color
+            rw.status='disabled' # disable
+
+
+@views.route("/showQuest/<int:Qid>")
+def showQuest(Qid):
+    questList=IQtest.query.all()
+    quest=IQtest.query.filter_by(qid=Qid).first()
+    setStatus(questList)
+    return render_template("dashboard.html", questList=questList, quest=quest)  
+
+
+@views.route('/saveAns', methods=["POST"]) 
+def saveAns():
+    Qid=request.form.get('Qid')
+    ans=request.form.get('answer')
+    #update the question id and its selected answer in session variable result
+    res=session['result']
+    res= res+Qid+','+ans+','
+    session['result']=res
+    questList=IQtest.query.all()
+    setStatus(questList)
+    quest=IQtest.query.filter_by(id=Qid).first()
+    return render_template("dashboard.html", questList=questList, quest=quest)  
+
+
+@views.route("/logout")
+def logout():
+    #calculate result
+    count=0
+    txt=""
+    strval=session['result'].strip()
+    #split result string by ','
+    ans=strval.split(',')
+    for i in range(int(len(ans)/2)):
+        qd=ans[2*i] # get question id
+        qn=ans[2*i+1]  # get the sorresponding answer
+        tt=int(qd)
+        quest=IQtest.query.filter_by(qid=tt).first()
+        actans=quest.answer
+        if actans==int(qn):#compare correct answer in questions table with answer chosen by user
+            count=count+1 # increment counter
+    txt=txt+'You have '+ str(count)+ ' correct questions out of '+ str(int(len(ans)/2))+ ' questions ' # set the result statement
+    return render_template("result.html",txt=txt) 

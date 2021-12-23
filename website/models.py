@@ -1,3 +1,4 @@
+from sqlalchemy.ext.declarative.api import declared_attr
 from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
@@ -71,12 +72,20 @@ class Task(db.Model):
 
 class Iqtest(db.Model):
     __tablename__ = 'iqtest'
-    id = db.Column(db.Integer, primary_key=True)
+    Qid = db.Column(db.Integer, primary_key=True)
     
     title = db.Column(db.String(100))
-    picture = db.Column(db.String(250)) 
+    picture = db.Column(db.String(250))
+
+    PictureUrl_A = db.Column(db.String(100))
+    PictureUrl_B = db.Column(db.String(100))
+    PictureUrl_C = db.Column(db.String(100))
+    PictureUrl_D = db.Column(db.String(100))
+
     a = db.Column(db.String(100))
     b = db.Column(db.String(100))
     c = db.Column(db.String(100))
     d = db.Column(db.String(100))
+
     answer = db.Column(db.String(100))
+    backColor = db.Column(db.String(100))

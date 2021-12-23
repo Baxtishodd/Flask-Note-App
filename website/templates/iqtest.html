@@ -6,6 +6,33 @@
     <a class="btn btn-light" href="" data-toggle="modal" data-target="#NewQuestion">New Question</a>
 </div> -->
 
+
+<B> Your Questions</B><br><br>
+{% for q in questList %}
+    <a href="{{url_for('showQuest', subject=q.subject,Qid=q.qid)}}"><button value={{q.Qid}} {{q.status}} id={{q.qid}}  style="margin:2px; width:40px; height:40px;background-color:{{q.bcol}}" >{{loop.index}}</button></a>
+{% endfor %}    
+​
+<br><br><a href="{{url_for('logout')}}"><button>Display Result</button></a>
+{% endblock %}
+​
+<form method="POST" action={{url_for('saveAns')}}>
+
+<div class="qst">{{quest.question}}</div>
+    <div class="opt"><input type="radio" name="answer" value="1"> {{quest.option1}}</div>
+    <div class="opt"><input type="radio" name="answer" value="2"> {{quest.option2}}</div>
+    <div class="opt"><input type="radio" name="answer" value="3"> {{quest.option3}}</div>
+    <div class="opt"><input type="radio" name="answer" value="4"> {{quest.option4}}</div>
+    <input type="submit" value="Save Answer"/>
+</form>
+
+​
+<!-- <script>
+function colorbtn(bid) {
+  document.getElementByid(bid).background-color = "green";
+}
+</script> -->
+
+
 <div class="box-border ">
     <div class=" test-box">
         <!-- <img src="/website/static/images/testfiles/"> -->
